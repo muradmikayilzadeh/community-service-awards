@@ -91,8 +91,6 @@ class UserServiceController extends Controller
     {
         $user = User::find(Auth::user()->id);
         $service = UserService::find($request->id);
-        $user->total_hours = $user->total_hours - $service->duration;
-        $user->save();
         $service->delete();
         return redirect("/home")->with("deleted","Your Service Successfully Deleted");
     }
