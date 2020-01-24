@@ -87,6 +87,22 @@
                 <div class="links">
                     <a href="https://github.com/muradmikayilzadeh/community-service-awards.git">Github</a>
                 </div>
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                        Admin <br>
+                        <b>Email:</b>admin@gmail.com <br>
+                        <b>Password:</b>fbla2020
+                    </div>
+                </div>
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                        User <br>
+                        <b>Email:</b>john.doe@gmail.com <br>
+                        <b>Password:</b>fbla2020
+                    </div>
+                </div>
             </div>
         </div>
     </body>
