@@ -44,9 +44,6 @@ class UserServiceController extends Controller
         $new->date = $request->date;
         $new->duration = $request->duration;
         $new->save();
-        $user = User::find(Auth::user()->id);
-        $user->total_hours = $user->total_hours + $request->duration;
-        $user->save();
         return back()->with("success","New Community Service Added");
     }
 

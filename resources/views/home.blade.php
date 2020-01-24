@@ -426,7 +426,7 @@
                                     <td>{{$user->name}}</td>
                                     <td>{{$user->email}}</td>
                                     <td>{{$user->grade}}</td>
-                                    <td>{{$user->total_hours}} hours</td>
+                                    <td>{{$user->getTotalHours->sum("duration")}} hours</td>
                                     <td>
                                         <a href="{{url("user-info",$user->id)}}" style="display:inline-block" class="btn btn-xs btn-info">Show</a>
                                         <form action="{{url("user-delete")}}" method="POST" style="display:inline-block">
