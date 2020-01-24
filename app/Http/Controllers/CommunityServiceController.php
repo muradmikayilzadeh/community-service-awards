@@ -111,6 +111,6 @@ class CommunityServiceController extends Controller
         }
 
         $service->delete();
-        return redirect("/")->with("serviceDeleted","Service Deleted Successfully");
+        return redirect("/home")->with("serviceDeleted","Service Deleted Successfully");
     }
 }
