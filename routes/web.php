@@ -20,7 +20,7 @@ Route::post("add-community-service","CommunityServiceController@store");
 Route::post("delete-community-service","CommunityServiceController@destroy");
 Route::get("service-info/{id}","CommunityServiceController@show");
 Route::get("service-edit/{id}","CommunityServiceController@edit");
-Route::post("update-community-service","CommunityServiceController@store");
+Route::post("update-community-service","CommunityServiceController@update");
 
 
 
