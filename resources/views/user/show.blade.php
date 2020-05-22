@@ -56,7 +56,7 @@
                                     <td>{{$service->duration}} hours</td>
                                     <td>{{$service->date}}</td>
                                     <td>
-                                        <form action="{{url("delete-community-service-user")}}" onsubmit="return confirm('Are you sure?')" method="POST">
+                                        <form action="{{url("delete-community-service-user")}}" method="POST">
                                             @csrf
                                             <input type="hidden" value="{{$service->id}}" name="id">
                                             <input type="submit" class="btn btn-xs btn-danger" value="Delete">

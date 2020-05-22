@@ -37,4 +37,16 @@ class HomeController extends Controller
         $month_services = UserService::where([["user_id",Auth::user()->id],["date", ">", date('Y-m-d',strtotime("-30 days"))]])->get();
         return view("home",compact("services","users","user_services","today_services","yesterday_services","week_services","month_services"));
     }
+
+    public function print()
+    {
+        $users = User::where("is_admin",0)->get();
+        $services = CommunityService::all();
+        $user_services = UserService::where("user_id",Auth::user()->id)->get();
+        $today_services = UserService::where([["user_id",Auth::user()->id],["date", "=", date('Y-m-d')]])->get(); 
+        $yesterday_services = UserService::where([["user_id",Auth::user()->id],["date", "=", date('Y-m-d',strtotime("-1 days"))]])->get();
+        $week_services = UserService::where([["user_id",Auth::user()->id],["date", ">", date('Y-m-d',strtotime("-7 days"))]])->get();
+        $month_services = UserService::where([["user_id",Auth::user()->id],["date", ">", date('Y-m-d',strtotime("-30 days"))]])->get();
+        return view("user.print",compact("services","users","user_services","today_services","yesterday_services","week_services","month_services"));
+    }
 }

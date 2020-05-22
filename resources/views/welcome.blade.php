@@ -85,7 +85,9 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://github.com/muradmikayilzadeh/community-service-awards.git">Github</a>
+                    <a href="{{asset("fbla_docs.pdf")}}" target="_blank">Q&A</a>
+                    <a href="{{asset("images/fbla_db_design.PNG")}}" target="_blank">Database Design</a>
+                    <a href="https://github.com/muradmikayilzadeh/community-service-awards.git" target="_blank">Source Code</a>
                 </div>
                 <hr>
                 <div class="card">

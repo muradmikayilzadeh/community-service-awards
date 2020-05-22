@@ -1,11 +1,4 @@
 @extends('layouts.app')
-<style>
-    @media print { 
-        #add_community_service,.btn, table td:last-child{ 
-            display: none !important; 
-        } 
-    } 
-</style>
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -29,10 +22,10 @@
                     <p><b>Number: </b>#{{Auth::user()->id}}</p>
                     <p><b>Total Hours: </b>{{Auth::user()->getTotalHours->sum("duration")}} hours</p>
 
-                    <button onclick="window.print();" class="btn btn-success">Print full report</button>
+                    <a href="{{url("/user-print")}}" class="btn btn-success">Print report</a>
                 </div>
             </div>
-            <br>
+
             <div class="card" id="add_community_service">
                <div class="card-header">Add Community Service</div>
                <div class="card-body"> 
@@ -113,182 +106,181 @@
                 </form>
                 </div>
                 </div>
-            <br>
-            <div class="card">
-                <div class="card-header">All Community Services</div>
-                <div class="card-body">
+
+                <div class="tab">
+                    <button class="tablinks active" onclick="openTab(event, 'All')">All</button>
+                    <button class="tablinks" onclick="openTab(event, 'Today')">Today</button>
+                    <button class="tablinks" onclick="openTab(event, 'Yesterday')">Yesterday</button>
+                    <button class="tablinks" onclick="openTab(event, 'L_Week')">Last Week</button>
+                    <button class="tablinks" onclick="openTab(event, 'L_Month')">Last Month</button>
+                </div>
+                  
+                <div id="All" class="tabcontent" style="display: block">
+                    <h3>All</h3>
                     @if(Session::has("deleted"))
-                        <div class="col-md-12 alert alert-success">Service Deleted Successfully</div>
-                    @endif
-                    @if(count($user_services) == 0)
-                        <h3 class="text-center">No Data Found</h3>
-                    @else
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <td>#</td>
-                                <td>Service Name</td>
-                                <td>Description</td>
-                                <td>Duration</td>
-                                <td>Date</td>
-                                <td>Actions</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($user_services as $service)
+                            <div class="col-md-12 alert alert-success">Service Deleted Successfully</div>
+                        @endif
+                        @if(count($user_services) == 0)
+                            <h3 class="text-center">No Data Found</h3>
+                        @else
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td>{{$service->id}}</td>
-                                    <td>{{$service->getServiceName->name}}</td>
-                                    <td>{{$service->description}}</td>
-                                    <td>{{$service->duration}} hours</td>
-                                    <td>{{$service->date}}</td>
-                                    <td>
-                                        <form action="{{url("delete-community-service-user")}}" method="POST">
-                                            @csrf
-                                            <input type="hidden" value="{{$service->id}}" name="id">
-                                            <input type="submit" class="btn btn-xs btn-danger" value="Delete">
-                                        </form>
-                                    </td>
+                                    <td>#</td>
+                                    <td>Service Name</td>
+                                    <td>Description</td>
+                                    <td>Duration</td>
+                                    <td>Date</td>
+                                    <td>Actions</td>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($user_services as $service)
+                                    <tr>
+                                        <td>{{$service->id}}</td>
+                                        <td>{{$service->getServiceName->name}}</td>
+                                        <td>{{$service->description}}</td>
+                                        <td>{{$service->duration}} hours</td>
+                                        <td>{{$service->date}}</td>
+                                        <td>  
+                                            <form action="{{url("delete-community-service-user")}}" onsubmit="return confirm('Are you sure?')" method="POST">
+                                                @csrf
+                                                <input type="hidden" value="{{$service->id}}" name="id">
+                                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @endif
+                </div>
+                  
+                <div id="Today" class="tabcontent">
+                    <h3>Today</h3>
+                    @if(Session::has("deleted"))
+                            <div class="col-md-12 alert alert-success">Service Deleted Successfully</div>
+                        @endif
+                        @if(count($today_services) == 0)
+                            <h3 class="text-center">No Data Found</h3>
+                        @else
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Service Name</td>
+                                    <td>Description</td>
+                                    <td>Duration</td>
+                                    <td>Date</td>
+                                    <td>Actions</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($today_services as $service)
+                                    <tr>
+                                        <td>{{$service->id}}</td>
+                                        <td>{{$service->getServiceName->name}}</td>
+                                        <td>{{$service->description}}</td>
+                                        <td>{{$service->duration}} hours</td>
+                                        <td>{{$service->date}}</td>
+                                        <td>
+                                            <form action="{{url("delete-community-service-user")}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" value="{{$service->id}}" name="id">
+                                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @endif
+                </div>
+                  
+                <div id="Yesterday" class="tabcontent">
+                    <h3>Yesterday</h3>
+                    @if(Session::has("deleted"))
+                            <div class="col-md-12 alert alert-success">Service Deleted Successfully</div>
+                        @endif
+                        @if(count($yesterday_services) == 0)
+                            <h3 class="text-center">No Data Found</h3>
+                        @else
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Service Name</td>
+                                    <td>Description</td>
+                                    <td>Duration</td>
+                                    <td>Date</td>
+                                    <td>Actions</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($yesterday_services as $service)
+                                    <tr>
+                                        <td>{{$service->id}}</td>
+                                        <td>{{$service->getServiceName->name}}</td>
+                                        <td>{{$service->description}}</td>
+                                        <td>{{$service->duration}} hours</td>
+                                        <td>{{$service->date}}</td>
+                                        <td>
+                                            <form action="{{url("delete-community-service-user")}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" value="{{$service->id}}" name="id">
+                                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     @endif
                 </div>
-            </div>
-            <br>
-            <div class="card">
-                <div class="card-header">Today Community Services</div>
-                <div class="card-body">
+    
+                <div id="L_Week" class="tabcontent">
+                    <h3>Last week</h3>
                     @if(Session::has("deleted"))
-                        <div class="col-md-12 alert alert-success">Service Deleted Successfully</div>
-                    @endif
-                    @if(count($today_services) == 0)
-                        <h3 class="text-center">No Data Found</h3>
-                    @else
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <td>#</td>
-                                <td>Service Name</td>
-                                <td>Description</td>
-                                <td>Duration</td>
-                                <td>Date</td>
-                                <td>Actions</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($today_services as $service)
+                            <div class="col-md-12 alert alert-success">Service Deleted Successfully</div>
+                        @endif
+                        @if(count($week_services) == 0)
+                            <h3 class="text-center">No Data Found</h3>
+                        @else
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td>{{$service->id}}</td>
-                                    <td>{{$service->getServiceName->name}}</td>
-                                    <td>{{$service->description}}</td>
-                                    <td>{{$service->duration}} hours</td>
-                                    <td>{{$service->date}}</td>
-                                    <td>
-                                        <form action="{{url("delete-community-service-user")}}" method="POST">
-                                            @csrf
-                                            <input type="hidden" value="{{$service->id}}" name="id">
-                                            <input type="submit" class="btn btn-xs btn-danger" value="Delete">
-                                        </form>
-                                    </td>
+                                    <td>#</td>
+                                    <td>Service Name</td>
+                                    <td>Description</td>
+                                    <td>Duration</td>
+                                    <td>Date</td>
+                                    <td>Actions</td>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($week_services as $service)
+                                    <tr>
+                                        <td>{{$service->id}}</td>
+                                        <td>{{$service->getServiceName->name}}</td>
+                                        <td>{{$service->description}}</td>
+                                        <td>{{$service->duration}} hours</td>
+                                        <td>{{$service->date}}</td>
+                                        <td>
+                                            <form action="{{url("delete-community-service-user")}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" value="{{$service->id}}" name="id">
+                                                <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     @endif
                 </div>
-            </div>
-            <br>
-            <div class="card">
-                <div class="card-header">Yesterday Community Services</div>
-                <div class="card-body">
-                    @if(Session::has("deleted"))
-                        <div class="col-md-12 alert alert-success">Service Deleted Successfully</div>
-                    @endif
-                    @if(count($yesterday_services) == 0)
-                        <h3 class="text-center">No Data Found</h3>
-                    @else
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <td>#</td>
-                                <td>Service Name</td>
-                                <td>Description</td>
-                                <td>Duration</td>
-                                <td>Date</td>
-                                <td>Actions</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($yesterday_services as $service)
-                                <tr>
-                                    <td>{{$service->id}}</td>
-                                    <td>{{$service->getServiceName->name}}</td>
-                                    <td>{{$service->description}}</td>
-                                    <td>{{$service->duration}} hours</td>
-                                    <td>{{$service->date}}</td>
-                                    <td>
-                                        <form action="{{url("delete-community-service-user")}}" method="POST">
-                                            @csrf
-                                            <input type="hidden" value="{{$service->id}}" name="id">
-                                            <input type="submit" class="btn btn-xs btn-danger" value="Delete">
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    @endif
-                </div>
-            </div>
-            <br>
-            <div class="card">
-                <div class="card-header">Last Week Community Services</div>
-                <div class="card-body">
-                    @if(Session::has("deleted"))
-                        <div class="col-md-12 alert alert-success">Service Deleted Successfully</div>
-                    @endif
-                    @if(count($week_services) == 0)
-                        <h3 class="text-center">No Data Found</h3>
-                    @else
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <td>#</td>
-                                <td>Service Name</td>
-                                <td>Description</td>
-                                <td>Duration</td>
-                                <td>Date</td>
-                                <td>Actions</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($week_services as $service)
-                                <tr>
-                                    <td>{{$service->id}}</td>
-                                    <td>{{$service->getServiceName->name}}</td>
-                                    <td>{{$service->description}}</td>
-                                    <td>{{$service->duration}} hours</td>
-                                    <td>{{$service->date}}</td>
-                                    <td>
-                                        <form action="{{url("delete-community-service-user")}}" method="POST">
-                                            @csrf
-                                            <input type="hidden" value="{{$service->id}}" name="id">
-                                            <input type="submit" class="btn btn-xs btn-danger" value="Delete">
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    @endif
-                </div>
-            </div>
-            <br>
-            <div class="card">
-                <div class="card-header">Last Month Community Services</div>
-                <div class="card-body">
+    
+                <div id="L_Month" class="tabcontent">
+                    <h3>Last Month</h3>
                     @if(Session::has("deleted"))
                         <div class="col-md-12 alert alert-success">Service Deleted Successfully</div>
                     @endif
@@ -327,11 +319,16 @@
                     </table>
                     @endif
                 </div>
+
             </div>
-        </div>
         
 
         @else
+        {{-- -------------------------------------====================--------------------------------- --}}
+
+        {{-- -------------------------------------Admin dashboard part--------------------------------- --}}
+        
+        {{-- -------------------------------------====================--------------------------------- --}}
 
         <div class="col-md-12">
             <div class="card">
@@ -349,8 +346,6 @@
                 </div>
 
             </div>
-
-            <br>
 
             <div class="card">
                 <div class="card-header">Add community service</div>
@@ -400,7 +395,6 @@
                 </div>
             </div>
 
-            <br>
             
             <div class="card">
                 <div class="card-header">Students</div>
@@ -429,7 +423,7 @@
                                     <td>{{$user->getTotalHours->sum("duration")}} hours</td>
                                     <td>
                                         <a href="{{url("user-info",$user->id)}}" style="display:inline-block" class="btn btn-xs btn-info">Show</a>
-                                        <form action="{{url("user-delete")}}" method="POST" style="display:inline-block">
+                                        <form action="{{url("user-delete")}}" method="POST" onsubmit="return confirm('Are you sure?')" style="display:inline-block">
                                             @csrf
                                             <input type="hidden" value="{{$user->id}}" name="id">
                                             <input type="submit" class="btn btn-xs btn-danger" value="Delete">
@@ -442,7 +436,6 @@
                 </div>
             </div>
 
-            <br>
 
             <div class="card">
                 <div class="card-header">Community Services</div>
@@ -468,7 +461,7 @@
                                     <td>
                                         <a href="{{url("service-info",$service->id)}}" style="display:inline-block" class="btn btn-xs btn-info">Show</a>
                                         <a href="{{url("service-edit",$service->id)}}" style="display:inline-block" class="btn btn-xs btn-success">Edit</a>
-                                        <form action="{{url("delete-community-service")}}" method="POST" style="display:inline-block">
+                                        <form action="{{url("delete-community-service")}}" onsubmit="return confirm('Are you sure?')" method="POST" style="display:inline-block">
                                             @csrf
                                             <input type="hidden" value="{{$service->id}}" name="id">
                                             <input type="submit" class="btn btn-xs btn-danger" value="Delete">

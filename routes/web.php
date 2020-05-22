@@ -27,9 +27,13 @@ Route::post("update-community-service","CommunityServiceController@update");
 
 Route::post("add-community-service-user","UserServiceController@store");
 Route::post("delete-community-service-user","UserServiceController@destroy");
+Route::get("user-service-edit/{id}","UserServiceController@edit");
+Route::get("user-print","HomeController@print");
+
 
 //User routes for admin
 Route::get("user-info/{id}","UserController@show");
+Route::get("user-info-report/{id}","UserController@print");
 Route::post("user-delete","UserController@destroy");
 
 
